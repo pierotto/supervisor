@@ -1,0 +1,11 @@
+services:
+
+    _defaults:
+        autowire: TRUE
+        autoconfigure: TRUE
+
+    Pierotto\SupervisorBundle\Command\SupervisorGeneratorCommand:
+        arguments:
+            $name: 'supervisor:generate'
+            $programs: '%supervisor.programs%'
+            $path: '%kernel.project_dir%/app/config/supervisor.conf'

@@ -1,0 +1,20 @@
+{
+	"name": "pierotto/supervisor",
+	"description": "Symfony extension for generating configuration of supervisor programs.",
+	"keywords": ["symfony", "supervisor"],
+	"type": "symfony-bundle",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Petr Gala"
+		}
+	],
+	"require": {
+		"php": ">=8.1"
+	},
+	"autoload": {
+		"psr-4": {
+			"Pierotto\\SupervisorBundle\\": "src/"
+		}
+	}
+}
