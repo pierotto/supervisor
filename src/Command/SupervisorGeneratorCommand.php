@@ -39,18 +39,21 @@ class SupervisorGeneratorCommand extends \Symfony\Component\Console\Command\Comm
 		[program:%s]
 		command = %s
 		numprocs = %d
+		autostart = %s
 		autorestart = %s
 		process_name = %%(program_name)s_%%(process_num)02d
 		killasgroup = %s
+		startretries = %d
 
 
 		EOT;
 
 		$content = '';
 		foreach ($this->programs as $name => $program) {
+			$autostart = $program['autostart'] ? 'true' : 'false';
 			$autorestart = $program['autorestart'] ? 'true' : 'false';
 			$killasgroup = $program['killasgroup'] ? 'true' : 'false';
-			$content .= \sprintf($template, $name, $program['command'], $program['numprocs'], $autorestart, $killasgroup);
+			$content .= \sprintf($template, $name, $program['command'], $program['numprocs'], $autostart, $autorestart, $killasgroup, $program['startretries']);
 		}
 
 		return $content;

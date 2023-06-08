@@ -35,6 +35,8 @@ supervisor:
         program_name:
             command: 'php %kernel.project_dir%/bin/console rabbitmq:consumer -m 10 queue_name'
             numprocs: 1
+            autostart: true
             autorestart: true
             killasgroup: true
+            startretries: 10
 ```
