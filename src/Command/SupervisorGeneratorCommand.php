@@ -7,6 +7,7 @@ class SupervisorGeneratorCommand extends \Symfony\Component\Console\Command\Comm
 
 	public function __construct(
 		string $name,
+		private readonly string $prefix,
 		private readonly array $programs,
 		private readonly string $path
 	)
@@ -53,10 +54,20 @@ class SupervisorGeneratorCommand extends \Symfony\Component\Console\Command\Comm
 			$autostart = $program['autostart'] ? 'true' : 'false';
 			$autorestart = $program['autorestart'] ? 'true' : 'false';
 			$killasgroup = $program['killasgroup'] ? 'true' : 'false';
-			$content .= \sprintf($template, $name, $program['command'], $program['numprocs'], $autostart, $autorestart, $killasgroup, $program['startretries']);
+			$content .= \sprintf($template, $this->getPrefixedName($name), $program['command'], $program['numprocs'], $autostart, $autorestart, $killasgroup, $program['startretries']);
 		}
 
 		return $content;
+	}
+
+
+	private function getPrefixedName(string $name): string
+	{
+		if ($this->prefix === '') {
+			return $name;
+		}
+
+		return \sprintf('%s_%s', $this->prefix, $name);
 	}
 
 }

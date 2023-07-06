@@ -7,5 +7,6 @@ services:
     Pierotto\SupervisorBundle\Command\SupervisorGeneratorCommand:
         arguments:
             $name: 'supervisor:generate'
+            $prefix: '%supervisor.prefix%'
             $programs: '%supervisor.programs%'
             $path: '%kernel.project_dir%/app/config/supervisor.conf'
