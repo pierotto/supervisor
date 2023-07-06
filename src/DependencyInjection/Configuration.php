@@ -12,6 +12,7 @@ class Configuration implements \Symfony\Component\Config\Definition\Configuratio
 		$treeBuilder->getRootNode()
 			->fixXmlConfig('program')
 				->children()
+					->scalarNode('prefix')->defaultValue('')->end()
 					->arrayNode('programs')
 					->useAttributeAsKey('name')
 					->arrayPrototype()
