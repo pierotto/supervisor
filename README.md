@@ -1,17 +1,19 @@
-# Supervisor
-Symfony extension for generating configuration of supervisor programs.
+# Supervisor Bundle
+The Supervisor Bundle is a Symfony extension that simplifies the generation of supervisor program configurations.
 
 ## About
 
-From the configuration it will generate a supervisor.conf containing the programs.
+This bundle takes your configuration and generates a supervisor.conf file containing the specified programs, along with their settings. You have the flexibility to choose the path and filename for this file.
 
 ## Installation
 
-Require the bundle and its dependencies with composer:
+To get started, require the bundle and its dependencies using Composer:
 
-`$ composer require pierotto/supervisor`
+```shell
+composer require pierotto/supervisor
+```
 
-Register the bundle:
+Then, register the bundle in your Symfony application:
 
 ```php
 // app/AppKernel.php
@@ -25,18 +27,34 @@ public function registerBundles(): array
 
 ## Usage
 
-In your configuration, write all the programs that you want to run through supervisord.
+To configure programs that you want to run via supervisord, follow these steps:
 
-Use the console command `$ php bin/console supervisor:generate` to start generating the supervisor.conf file. This file is generated in the `app/config` directory.
+1. In your Symfony configuration, define all the programs you wish to manage with Supervisor.
+2. Use the console command to generate the supervisor.conf file:
+
+```shell
+php bin/console supervisor:generate path/to/supervisor.conf
+```
+
+Here's an example configuration in YAML format:
 
 ```yaml
 supervisor:
+    prefix: '' # Prefix for all program names (optional)
     programs:
-        program_name:
-            command: 'php %kernel.project_dir%/bin/console rabbitmq:consumer -m 10 queue_name'
-            numprocs: 1
-            autostart: true
-            autorestart: true
-            killasgroup: true
-            startretries: 10
+        program_name: # Custom unique program name
+            command: 'php %kernel.project_dir%/bin/console your_custom_command'
+            numprocs: 1 # Number of process instances (optional, default: 1)
+            autostart: true # Automatically start the program on Supervisor startup (optional, default: true)
+            autorestart: true # Automatically restart the program if it exits or fails (optional, default: true)
+            killasgroup: true # Kill the program's process group when stopping (optional, default: true)
+            startretries: 10 # Number of retries to start the program in case of failure (optional, default: 3)
+            user: 'www-data' # User under which the program should run (optional)
+            directory: '/path/to/working/directory' # Working directory of the program (optional)
+            stdout_logfile: '/path/to/stdout.log' # File for standard output (optional)
+            stderr_logfile: '/path/to/stderr.log' # File for error output (optional)
+            environment: KEY1="value1",KEY2="value2" # Environment variable definitions (optional)
+            stopsignal: 'TERM' # Signal for program termination (optional)
+            stopwaitsecs: 10 # Time limit for program termination (optional)
+            priority: 999 # Program priority (optional)
 ```

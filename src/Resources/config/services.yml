@@ -4,9 +4,9 @@ services:
         autowire: TRUE
         autoconfigure: TRUE
 
-    Pierotto\SupervisorBundle\Command\SupervisorGeneratorCommand:
+    Pierotto\SupervisorBundle\Application\Command\SupervisorGeneratorCommand:
+
+    Pierotto\SupervisorBundle\Domain\SupervisorConfigGenerator:
         arguments:
-            $name: 'supervisor:generate'
             $prefix: '%supervisor.prefix%'
             $programs: '%supervisor.programs%'
-            $path: '%kernel.project_dir%/app/config/supervisor.conf'
