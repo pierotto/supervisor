@@ -52,6 +52,7 @@ class SupervisorConfigGenerator
 			$configuration['stopsignal'] ?? NULL,
 			$configuration['stopwaitsecs'] ?? NULL,
 			$configuration['priority'] ?? NULL,
+			$configuration['startsecs'] ?? NULL,
 		);
 
 		return \sprintf(

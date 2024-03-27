@@ -57,4 +57,5 @@ supervisor:
             stopsignal: 'TERM' # Signal for program termination (optional)
             stopwaitsecs: 10 # Time limit for program termination (optional)
             priority: 999 # Program priority (optional)
+            startsecs: 1 # Defines the duration, in seconds, a program must run after starting to be considered successful (optional)
 ```

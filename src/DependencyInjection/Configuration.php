@@ -31,6 +31,7 @@ class Configuration implements \Symfony\Component\Config\Definition\Configuratio
 							->scalarNode('stopsignal')->defaultNull()->end()
 							->integerNode('stopwaitsecs')->defaultNull()->end()
 							->integerNode('priority')->defaultNull()->end()
+							->integerNode('startsecs')->defaultNull()->end()
 						->end()
 					->end()
 				->end()
