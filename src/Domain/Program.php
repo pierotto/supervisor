@@ -20,6 +20,7 @@ class Program
 		private readonly ?string $stopsignal,
 		private readonly ?int $stopwaitsecs,
 		private readonly ?int $priority,
+		private readonly ?int $startsecs,
 	)
 	{
 	}
@@ -42,6 +43,7 @@ class Program
 			'stopsignal' => $this->stopsignal,
 			'stopwaitsecs' => $this->stopwaitsecs,
 			'priority' => $this->priority,
+			'startsecs' => $this->startsecs,
 		];
 
 		$options = \array_filter($options, static fn($value) => $value !== NULL);

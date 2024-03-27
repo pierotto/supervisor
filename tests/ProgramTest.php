@@ -28,6 +28,7 @@ class ProgramTest extends \PHPUnit\Framework\TestCase
 			$configuration['stopsignal'] ?? NULL,
 			$configuration['stopwaitsecs'] ?? NULL,
 			$configuration['priority'] ?? NULL,
+			$configuration['startsecs'] ?? NULL,
 		);
 
 		$this->assertEquals($expected, $program->toArray());
@@ -71,6 +72,7 @@ class ProgramTest extends \PHPUnit\Framework\TestCase
 					'stopsignal' => 'SIGTERM',
 					'stopwaitsecs' => 10,
 					'priority' => 5,
+					'startsecs' => 0,
 				],
 				'expected' => [
 					'command = my_command',
@@ -87,6 +89,7 @@ class ProgramTest extends \PHPUnit\Framework\TestCase
 					'stopsignal = SIGTERM',
 					'stopwaitsecs = 10',
 					'priority = 5',
+					'startsecs = 0',
 				],
 			],
 		];
