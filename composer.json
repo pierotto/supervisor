@@ -4,17 +4,43 @@
 	"keywords": ["symfony", "supervisor"],
 	"type": "symfony-bundle",
 	"license": "MIT",
+	"minimum-stability": "dev",
+	"prefer-stable": true,
 	"authors": [
 		{
 			"name": "Petr Gala"
 		}
 	],
 	"require": {
-		"php": ">=8.1"
+		"php": ">=8.1",
+		"symfony/dependency-injection": "^6.0 || ^7.0",
+		"symfony/console": "^6.0 || ^7.0",
+		"symfony/config":"^6.0 || ^7.0",
+		"symfony/http-kernel": "^6.0 || ^7.0"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^10",
+		"friendsofphp/php-cs-fixer": "^3.75",
+		"phpstan/phpstan": "^2.1"
 	},
 	"autoload": {
 		"psr-4": {
 			"Pierotto\\SupervisorBundle\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Pierotto\\SupervisorBundle\\Tests\\": "tests/"
+		}
+	},
+	"scripts": {
+		"test": "vendor/bin/phpunit",
+		"phpstan": "vendor/bin/phpstan analyse -c phpstan.dist.neon",
+		"cs-fix": "vendor/bin/php-cs-fixer fix"
+	},
+	"extra": {
+		"symfony": {
+			"bundle": "Pierotto\\SupervisorBundle\\Infrastructure\\Symfony\\SupervisorBundle"
 		}
 	}
 }

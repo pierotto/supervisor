@@ -1,6 +1,11 @@
 # Supervisor Bundle
 The Supervisor Bundle is a Symfony extension that simplifies the generation of supervisor program configurations.
 
+## Requirements
+
+- PHP 8.1+
+- Symfony 6.0+
+
 ## About
 
 This bundle takes your configuration and generates a supervisor.conf file containing the specified programs, along with their settings. You have the flexibility to choose the path and filename for this file.
@@ -16,16 +21,15 @@ composer require pierotto/supervisor
 Then, register the bundle in your Symfony application:
 
 ```php
-// app/AppKernel.php
-public function registerBundles(): array
-{
-    $bundles = [
-        new \Pierotto\SupervisorBundle\SupervisorBundle(),
-    ];
-}
+// bundles.php
+return [
+    Pierotto\SupervisorBundle\Infrastructure\Symfony\SupervisorBundle::class => ['all' => true],
+];
 ```
 
 ## Usage
+
+You can add this configuration to your Symfony project under `config/packages/supervisor.yaml`.
 
 To configure programs that you want to run via supervisord, follow these steps:
 
@@ -35,6 +39,8 @@ To configure programs that you want to run via supervisord, follow these steps:
 ```shell
 php bin/console supervisor:generate path/to/supervisor.conf
 ```
+
+This will generate a flat `supervisor.conf` file that can be directly included in your system's Supervisor configuration. It is recommended to run this command as part of your deployment process to ensure the generated configuration is always up to date.
 
 Here's an example configuration in YAML format:
 
