@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder($this->alias);
 
-        $treeBuilder->getRootNode() // @phpstan-ignore method.notFound
+        $treeBuilder->getRootNode()
             ->fixXmlConfig('program')
                 ->children()
                     ->scalarNode('prefix')->defaultValue('')->end()
