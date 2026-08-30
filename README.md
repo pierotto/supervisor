@@ -3,8 +3,17 @@ The Supervisor Bundle is a Symfony extension that simplifies the generation of s
 
 ## Requirements
 
-- PHP 8.1+
-- Symfony 6.0+
+- PHP 8.4+
+- Symfony 6.4, 7.4, or 8.x
+
+### Version compatibility
+
+| Bundle version | PHP | Symfony |
+| --- | --- | --- |
+| 3.x | 8.4+ | 6.4, 7.4, or 8.x |
+| 2.x | 8.1+ | 6.x or 7.x |
+
+Version 3.0 drops support for PHP versions below 8.4 and for Symfony versions older than 6.4.
 
 ## About
 
