@@ -22,6 +22,7 @@ class Configuration implements ConfigurationInterface
             ->fixXmlConfig('program')
                 ->children()
                     ->scalarNode('prefix')->defaultValue('')->end()
+                    ->scalarNode('group')->defaultValue('')->end()
                     ->arrayNode('programs')
                     ->useAttributeAsKey('name')
                     ->arrayPrototype()
