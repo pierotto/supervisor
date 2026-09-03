@@ -4,13 +4,20 @@ declare(strict_types=1);
 
 namespace Pierotto\SupervisorBundle\Domain\Supervisor;
 
+use Pierotto\SupervisorBundle\Domain\Dto\Group;
 use Pierotto\SupervisorBundle\Domain\Dto\Program;
 
 class SupervisorConfigGenerator
 {
-    private const TEMPLATE = <<<EOT
+    private const PROGRAM_TEMPLATE = <<<EOT
 	[program:%s]
 	process_name = %%(program_name)s_%%(process_num)02d
+	%s
+
+	EOT;
+
+    private const GROUP_TEMPLATE = <<<EOT
+	[group:%s]
 	%s
 
 	EOT;
@@ -37,6 +44,7 @@ class SupervisorConfigGenerator
     public function __construct(
         private readonly string $prefix,
         private readonly array $programs,
+        private readonly string $group = '',
     ) {
     }
 
@@ -45,6 +53,10 @@ class SupervisorConfigGenerator
         $content = [];
         foreach ($this->programs as $name => $program) {
             $content[] = $this->generateProgram($name, $program);
+        }
+
+        if ('' !== $this->group && [] !== $this->programs) {
+            $content[] = $this->generateGroup();
         }
 
         return \implode(\PHP_EOL, $content);
@@ -90,9 +102,25 @@ class SupervisorConfigGenerator
         );
 
         return \sprintf(
-            self::TEMPLATE,
+            self::PROGRAM_TEMPLATE,
             $this->getPrefixedName($name),
             \implode(\PHP_EOL, $program->toArray()),
+        );
+    }
+
+    private function generateGroup(): string
+    {
+        $names = \array_map(
+            fn (string $name): string => $this->getPrefixedName($name),
+            \array_keys($this->programs),
+        );
+
+        $group = new Group($names);
+
+        return \sprintf(
+            self::GROUP_TEMPLATE,
+            $this->group,
+            \implode(\PHP_EOL, $group->toArray()),
         );
     }
 

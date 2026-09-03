@@ -15,6 +15,9 @@ The Supervisor Bundle is a Symfony extension that simplifies the generation of s
 
 Version 3.0 drops support for PHP versions below 8.4 and for Symfony versions older than 6.4.
 
+Version 3.1 adds the optional `group` option, which wraps all generated programs in a supervisor
+process group.
+
 ## About
 
 This bundle takes your configuration and generates a supervisor.conf file containing the specified programs, along with their settings. You have the flexibility to choose the path and filename for this file.
@@ -56,6 +59,7 @@ Here's an example configuration in YAML format:
 ```yaml
 supervisor:
     prefix: '' # Prefix for all program names (optional)
+    group: '' # Wraps all programs in a supervisor process group (optional)
     programs:
         program_name: # Custom unique program name
             command: 'php %kernel.project_dir%/bin/console your_custom_command'
@@ -74,3 +78,61 @@ supervisor:
             priority: 999 # Program priority (optional)
             startsecs: 1 # Defines the duration, in seconds, a program must run after starting to be considered successful (optional)
 ```
+
+## Process groups
+
+On a server that runs several projects under one shared `supervisord`, `supervisorctl stop all` and
+`supervisorctl reload` hit every project at once. Setting `group` wraps the generated programs in a
+[supervisor process group](http://supervisord.org/configuration.html#group-x-section-settings), so a
+deployment can address only its own processes:
+
+```yaml
+supervisor:
+    group: 'myapp'
+    programs:
+        worker:
+            command: 'php %kernel.project_dir%/bin/console app:worker'
+```
+
+generates:
+
+```ini
+[program:worker]
+process_name = %(program_name)s_%(process_num)02d
+command = php /var/www/myapp/bin/console app:worker
+numprocs = 1
+autostart = true
+autorestart = true
+killasgroup = true
+startretries = 3
+
+[group:myapp]
+programs = worker
+```
+
+The processes are then addressed as `myapp:worker`, and a deployment can restart just that group
+without touching the other projects on the machine:
+
+```shell
+supervisorctl stop myapp:*
+# ... deploy ...
+php bin/console supervisor:generate config/supervisor.conf
+supervisorctl reread          # reads the config files, restarts nothing
+supervisorctl update myapp    # applies changes to this group only
+supervisorctl start myapp:*
+```
+
+Note that `supervisorctl reload` restarts the whole `supervisord` daemon and therefore every project
+on the machine; `reread` + `update <group>` is the group-scoped equivalent. Targeting `update` at a
+group name requires supervisor 3.2 or newer.
+
+`group` and `prefix` are independent, but combining them is redundant — the group already namespaces
+the program names. Use one or the other, otherwise you end up with `myapp:myapp_worker`.
+
+### Renaming existing programs
+
+Adding `group` to a project that already runs under supervisor renames its processes from `worker`
+(or `myapp_worker`) to `myapp:worker`. A group-scoped `supervisorctl update myapp` will not remove
+the old, ungrouped programs, because they are not part of that group. Stop them by their old names
+once and run an unscoped `supervisorctl reread && supervisorctl update`; that only restarts groups
+whose configuration actually changed, so the other projects on the machine stay untouched.

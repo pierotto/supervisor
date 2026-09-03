@@ -19,7 +19,8 @@ class SupervisorExtension extends Extension
 
         $container->register(SupervisorConfigGenerator::class)
             ->setArgument('$prefix', $config['prefix'])
-            ->setArgument('$programs', $config['programs']);
+            ->setArgument('$programs', $config['programs'])
+            ->setArgument('$group', $config['group']);
 
         $container->register(SupervisorGeneratorCommand::class)
             ->setArgument('$supervisorConfigGenerator', new Reference(
